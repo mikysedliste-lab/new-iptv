@@ -3,13 +3,14 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-22.04 # Stabilnější verze Linuxu pro Buildozer
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Build with Buildozer
-        uses: ArtemSBulat/buildozer-action@v1
+        # Opravený název akce (ArtemSBulat s velkým S)
+        uses: ArtemSBulat/buildozer-action@v1.2.0
         with:
           workdir: .
           buildozer_version: master
