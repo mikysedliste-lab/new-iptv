@@ -3,7 +3,6 @@ on: [push, pull_request]
 
 jobs:
   build:
-    # Ubuntu 22.04 je pro Kivy nejstabilnější, verze 24 je moc nová
     runs-on: ubuntu-22.04
 
     steps:
@@ -25,8 +24,9 @@ jobs:
 
       - name: Build APK
         run: |
-          # Vynecháme 'yes |' a použijeme parametr, který vše odsouhlasí uvnitř Buildozeru
+          # Vymažeme cesty k cizímu NDK, které nám tam GitHub vnucuje
+          unset ANDROID_NDK_HOME
+          unset ANDROID_NDK_ROOT
           buildozer -v android debug
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
-          BUILD_ANDROID: "1"
