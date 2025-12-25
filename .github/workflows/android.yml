@@ -10,7 +10,7 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt update
-          sudo apt install -y libtool pkg-config autoconf automake libffi-dev zlib1g-dev libssl-dev
+          sudo apt install -y libtool pkg-config autoconf automake libffi-dev zlib1g-dev libssl-dev gettext
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -21,9 +21,17 @@ jobs:
         run: |
           pip install --upgrade buildozer Cython==0.29.33
 
+      - name: Accept Android Licenses
+        run: |
+          mkdir -p ~/.android
+          touch ~/.android/repositories.cfg
+          # Toto automaticky odsouhlasí všechno, co by Buildozer mohl chtít
+          yes | sdkmanager --sdk_root=$ANDROID_HOME --licenses || true
+
       - name: Build with Buildozer
         run: |
-          yes | buildozer -v android debug
+          # Spuštění buildu bez interaktivních dotazů
+          buildozer -v android debug
         
       - name: Upload APK
         uses: actions/upload-artifact@v4
