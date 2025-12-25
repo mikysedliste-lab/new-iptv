@@ -1,0 +1,32 @@
+name: Build Android APK
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install system dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y libtool pkg-config autoconf automake libffi-dev zlib1g-dev libssl-dev
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Buildozer and Cython
+        run: |
+          pip install --upgrade buildozer Cython==0.29.33
+
+      - name: Build with Buildozer
+        run: |
+          yes | buildozer -v android debug
+        
+      - name: Upload APK
+        uses: actions/upload-artifact@v3
+        with:
+          name: IPTV-Master-APK-30.5
+          path: bin/*.apk
