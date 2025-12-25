@@ -15,7 +15,7 @@ android.permissions = INTERNET, WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE, A
 android.api = 33
 android.minapi = 21
 android.sdk = 33
-android.ndk = 25b
+android.ndk_path = /home/runner/.buildozer/android/platform/android-ndk-r25b
 android.accept_sdk_license = True
 
 [buildozer]
