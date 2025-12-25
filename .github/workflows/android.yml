@@ -3,30 +3,49 @@ on: [push, pull_request]
 
 jobs:
   build:
+    # Používáme Ubuntu 22.04, protože je pro Kivy nejstabilnější
     runs-on: ubuntu-22.04
 
     steps:
       - uses: actions/checkout@v4
 
+      # KROK 1: Vynucení Javy 11 (zásadní pro Gradle)
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+
+      # KROK 2: Instalace systémových nástrojů
       - name: Install dependencies
         run: |
           sudo apt update
           sudo apt install -y libtool pkg-config autoconf automake libffi-dev zlib1g-dev libssl-dev gettext
 
+      # KROK 3: Nastavení Pythonu
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
+      # KROK 4: Instalace správných verzí Buildozeru a Cythonu
       - name: Install Buildozer and Cython
         run: |
           pip install --upgrade buildozer Cython==0.29.33
 
+      # KROK 5: Samotný Build aplikace
       - name: Build APK
         run: |
-          # Vymažeme cesty k cizímu NDK, které nám tam GitHub vnucuje
+          # Vymažeme systémové cesty k NDK, aby Buildozer použil své vlastní
           unset ANDROID_NDK_HOME
           unset ANDROID_NDK_ROOT
           buildozer -v android debug
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
+
+      # KROK 6: Nahrání hotového APK na GitHub (najdeš ho pak pod zelenou fajfkou)
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: IPTV-Master-Final-APK
+          path: bin/*.apk
