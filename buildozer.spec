@@ -6,8 +6,8 @@ package.domain = org.test
 source.dir = .
 source.include_exts = py,png,jpg,kv,atlas
 version = 1
-# Přidali jsme konkrétní verze pro stabilitu
-requirements = python3,kivy==2.3.0,requests,pyjnius,certifi,openssl
+# Zůstáváme u stabilní verze 2.2.1
+requirements = python3,kivy==2.2.1,requests,pyjnius,certifi,openssl
 
 orientation = portrait
 fullscreen = 0
@@ -19,8 +19,6 @@ android.ndk_api = 24
 android.archs = arm64-v8a
 android.enable_androidx = True
 android.accept_sdk_license = True
-
-# TATO ŘÁDKA JE KLÍČOVÁ - opravuje chybu s SDLActivity patchem
 p4a.branch = develop
 
 [buildozer]
