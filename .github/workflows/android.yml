@@ -1,3 +1,4 @@
+
 name: Build Android APK
 on: [push, pull_request]
 
@@ -32,17 +33,18 @@ jobs:
         run: |
           unset ANDROID_NDK_HOME
           unset ANDROID_NDK_ROOT
-          # Zkusíme build, při výpadku sítě opakujeme
-          for i in {1..3}; do buildozer -v android debug && break || sleep 30; done
+          # Smažeme všechno, co by mohlo smrdět starou chybou
+          rm -rf .buildozer/
+          rm -rf bin/
+          # Spustíme build bez jakýchkoliv parametrů navíc
+          buildozer -v android debug
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: IPTV-Master-Final-APK
-          # Tato část je teď důležitá - hledáme na více místech najednou
-          path: |
-            bin/*.apk
-            .buildozer/android/platform/build-arm64-v8a/dists/iptv_master/build/outputs/apk/debug/*.apk
+          name: IPTV-Master-Final
+          # Prohledáme celý pracovní adresář, abychom to APK našli, kdekoli bude
+          path: "**/*.apk"
           if-no-files-found: error
