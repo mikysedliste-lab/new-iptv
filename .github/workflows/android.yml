@@ -1,3 +1,4 @@
+
 name: Build Android APK
 on: [push, pull_request]
 
@@ -30,10 +31,10 @@ jobs:
 
       - name: Build APK
         run: |
-          # Žádné složité čištění, prostě jen build v čistém prostředí
           unset ANDROID_NDK_HOME
           unset ANDROID_NDK_ROOT
-          buildozer -v android debug
+          # Tento příkaz zkusí build 3x, pokud spadne na síti
+          for i in {1..3}; do buildozer -v android debug && break || sleep 30; done
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
 
