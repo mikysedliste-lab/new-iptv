@@ -1,3 +1,4 @@
+
 name: Build Android APK
 on: [push, pull_request]
 
@@ -27,17 +28,14 @@ jobs:
       - name: Install Buildozer and Cython
         run: |
           pip install --upgrade pip
-          pip install --upgrade buildozer Cython==3.0.10 python-for-android
+          # Tady je ta změna: Cython 0.29.33 je kompatibilní s Kivy 2.2.1
+          pip install --upgrade buildozer "Cython<3.0" python-for-android
 
       - name: Build APK
         run: |
-          # Vyčistíme staré proměnné a mezipaměť
           unset ANDROID_NDK_HOME
           unset ANDROID_NDK_ROOT
           rm -rf .buildozer/
-          rm -rf bin/
-          
-          # Spuštění čistého buildu
           buildozer -v android debug
         env:
           APP_ANDROID_ACCEPT_SDK_LICENSE: "1"
@@ -48,4 +46,4 @@ jobs:
           name: IPTV-App-Final
           path: "**/*.apk"
           if-no-files-found: error
-
+ 
